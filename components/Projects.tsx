@@ -54,10 +54,10 @@ const Projects: React.FC = () => {
                    <a href="https://github.com/NboTop/salt-and-prepper" target="_blank" rel="noreferrer" className="flex items-center justify-center gap-2 px-4 py-2 border-2 border-white text-sm font-bold text-white hover:bg-white hover:text-black transition-colors group/link">
                      <Github size={16} /> CODE <span className="opacity-0 group-hover/link:opacity-100 transition-opacity">→</span>
                    </a>
-                   <a href="https://github.com/NboTop/salt-and-prepper" target="_blank" rel="noreferrer" className="group/btn relative flex items-center justify-center gap-2 px-4 py-2 overflow-hidden border-2 border-magenta text-sm font-bold text-magenta hover:text-black transition-colors">
+                   <a href="https://salt-and-prepper-e9th.onrender.com/" target="_blank" rel="noreferrer" className="group/btn relative flex items-center justify-center gap-2 px-4 py-2 overflow-hidden border-2 border-magenta text-sm font-bold text-magenta hover:text-black transition-colors">
                      <div className="absolute inset-0 bg-magenta translate-y-[101%] group-hover/btn:translate-y-0 transition-transform duration-300 ease-in-out" />
                      <div className="relative z-10 flex items-center gap-2">
-                        VIEW <ArrowUpRight size={16} />
+                        LIVE <ArrowUpRight size={16} />
                      </div>
                    </a>
                 </div>
