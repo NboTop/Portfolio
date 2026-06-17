@@ -34,7 +34,7 @@ const Projects: React.FC = () => {
                  <h3 className="text-3xl font-black text-white uppercase leading-none group-hover:text-magenta transition-colors">
                    Salt & Prepper
                  </h3>
-                 <span className="text-xs font-bold text-brutal-gray border border-brutal-gray px-2 py-1">GROUP PROJECT</span>
+                 <span className="text-xs font-bold text-brutal-gray border border-brutal-gray px-2 py-1">2025</span>
               </div>
               
               <p className="text-brutal-gray text-sm font-mono mb-6 leading-relaxed max-w-xl">
