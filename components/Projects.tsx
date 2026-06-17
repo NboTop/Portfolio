@@ -16,7 +16,7 @@ const Projects: React.FC = () => {
         */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           
-          {/* PROJECT 1: Tribal Treasures */}
+          {/* PROJECT 1: Salt & Prepper */}
           <div className="group relative bg-brutal-card border-2 border-magenta transition-all duration-300 hover:shadow-brutal hover:-translate-y-2 flex flex-col h-full lg:col-span-2 lg:flex-row lg:h-auto">
             
             {/* Visual Top (Desktop: Left) */}
@@ -25,27 +25,25 @@ const Projects: React.FC = () => {
                {/* Abstract geometric representation */}
                <Box size={80} className="text-magenta opacity-50 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500" />
                <div className="absolute bottom-2 right-2 text-[10px] bg-black text-magenta px-2 py-1 font-bold border border-magenta">
-                 AR + WEB3
+                 QUIZ PLATFORM
                </div>
             </div>
 
             <div className="p-8 flex flex-col flex-grow">
               <div className="flex justify-between items-start mb-4">
                  <h3 className="text-3xl font-black text-white uppercase leading-none group-hover:text-magenta transition-colors">
-                   Tribal Treasures
+                   Salt & Prepper
                  </h3>
-                 <span className="text-xs font-bold text-brutal-gray border border-brutal-gray px-2 py-1">2025</span>
+                 <span className="text-xs font-bold text-brutal-gray border border-brutal-gray px-2 py-1">GROUP PROJECT</span>
               </div>
               
               <p className="text-brutal-gray text-sm font-mono mb-6 leading-relaxed max-w-xl">
-                A full-stack AR-enabled e-commerce marketplace celebrating Rathwa tribal art. 
-                Features 60fps AR.js rendering, Polygon smart contracts for authenticity, and 
-                gamified learning modules. Built at SMART Gujarat Hackathon 2025.
+                A comprehensive quiz-taking platform featuring an Admin dashboard for quiz generation and management, alongside a dedicated User dashboard for attempting quizzes and tracking performance.
               </p>
 
               <div className="space-y-6 mt-auto">
                 <div className="flex flex-wrap gap-2">
-                   {['Next.js', 'Solidity', 'AR.js', 'Three.js', 'MongoDB', 'AWS S3'].map(tech => (
+                   {['Python', 'Flask', 'SQLite', 'Jinja2', 'Bootstrap'].map(tech => (
                      <span key={tech} className="text-[10px] font-bold text-magenta border border-magenta px-2 py-1 uppercase hover:bg-magenta hover:text-black transition-colors cursor-default">
                        {tech}
                      </span>
@@ -53,13 +51,13 @@ const Projects: React.FC = () => {
                 </div>
 
                 <div className="grid grid-cols-2 gap-4 pt-6 border-t border-zinc-800 max-w-md">
-                   <a href="https://github.com/NboTop/tribe" target="_blank" rel="noreferrer" className="flex items-center justify-center gap-2 px-4 py-2 border-2 border-white text-sm font-bold text-white hover:bg-white hover:text-black transition-colors group/link">
+                   <a href="https://github.com/NboTop/salt-and-prepper" target="_blank" rel="noreferrer" className="flex items-center justify-center gap-2 px-4 py-2 border-2 border-white text-sm font-bold text-white hover:bg-white hover:text-black transition-colors group/link">
                      <Github size={16} /> CODE <span className="opacity-0 group-hover/link:opacity-100 transition-opacity">→</span>
                    </a>
-                   <a href="#" className="group/btn relative flex items-center justify-center gap-2 px-4 py-2 overflow-hidden border-2 border-magenta text-sm font-bold text-magenta hover:text-black transition-colors">
+                   <a href="https://github.com/NboTop/salt-and-prepper" target="_blank" rel="noreferrer" className="group/btn relative flex items-center justify-center gap-2 px-4 py-2 overflow-hidden border-2 border-magenta text-sm font-bold text-magenta hover:text-black transition-colors">
                      <div className="absolute inset-0 bg-magenta translate-y-[101%] group-hover/btn:translate-y-0 transition-transform duration-300 ease-in-out" />
                      <div className="relative z-10 flex items-center gap-2">
-                        LIVE <ArrowUpRight size={16} />
+                        VIEW <ArrowUpRight size={16} />
                      </div>
                    </a>
                 </div>
