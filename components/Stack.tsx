@@ -41,7 +41,7 @@ const Stack: React.FC = () => {
             items={[
               { name: 'Docker', icon: 'docker' },
               { name: 'K8s', icon: 'kubernetes' },
-              { name: 'AWS', icon: 'amazonwebservices' },
+              { name: 'AWS', deviconClass: 'devicon-amazonwebservices-plain-wordmark' },
               { name: 'MongoDB', icon: 'mongodb' },
               { name: 'Git', icon: 'git' },
               { name: 'Figma', icon: 'figma' }
@@ -56,7 +56,8 @@ const Stack: React.FC = () => {
 
 interface SkillItem {
   name: string;
-  icon: string;
+  icon?: string;
+  deviconClass?: string;
 }
 
 const SkillBox = ({ title, items }: { title: string, items: SkillItem[] }) => (
@@ -75,14 +76,18 @@ const SkillBox = ({ title, items }: { title: string, items: SkillItem[] }) => (
         <div key={item.name} className="flex items-center gap-3 group/item cursor-default transition-transform duration-300 hover:translate-x-2">
           {/* Icon Box: Fills with magenta on hover */}
           <div className="w-8 h-8 flex items-center justify-center bg-zinc-900 border border-zinc-800 group-hover/item:border-magenta group-hover/item:bg-magenta transition-all duration-300 shadow-none group-hover/item:shadow-[2px_2px_0px_white]">
-             <img 
-               src={`https://cdn.simpleicons.org/${item.icon}/FF00FF`} 
-               alt={item.name} 
-               className="w-4 h-4 opacity-70 group-hover/item:opacity-100 group-hover/item:invert group-hover/item:brightness-0 transition-all"
-               onError={(e) => {
-                 (e.target as HTMLImageElement).style.display = 'none'; 
-               }}
-             />
+             {item.deviconClass ? (
+               <i className={`${item.deviconClass} text-magenta text-sm opacity-70 group-hover/item:opacity-100 group-hover/item:text-black transition-all`} />
+             ) : (
+               <img 
+                 src={`https://cdn.simpleicons.org/${item.icon}/FF00FF`} 
+                 alt={item.name} 
+                 className="w-4 h-4 opacity-70 group-hover/item:opacity-100 group-hover/item:invert group-hover/item:brightness-0 transition-all"
+                 onError={(e) => {
+                   (e.target as HTMLImageElement).style.display = 'none'; 
+                 }}
+               />
+             )}
           </div>
           <span className="text-xs font-bold font-mono text-zinc-400 group-hover/item:text-white transition-colors">
             {item.name}
