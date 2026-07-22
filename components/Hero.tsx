@@ -1,68 +1,148 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { ArrowDownRight, Terminal } from 'lucide-react';
+import { motion } from 'motion/react';
+
+const ROLES = [
+  'Full Stack Engineer',
+  'AI/ML Researcher',
+  'Computer Engineering Student'
+];
 
 const Hero: React.FC = () => {
+  const [currentRoleIndex, setCurrentRoleIndex] = useState(0);
+  const [currentText, setCurrentText] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    const { clientX, clientY } = e;
+    const x = (clientX / window.innerWidth - 0.5) * 20; // max 10px shift
+    const y = (clientY / window.innerHeight - 0.5) * 20;
+    setMousePos({ x, y });
+  };
+
+  useEffect(() => {
+    const typeSpeed = isDeleting ? 50 : 100;
+    const currentRole = ROLES[currentRoleIndex];
+
+    const handleType = () => {
+      if (!isDeleting && currentText === currentRole) {
+        setTimeout(() => setIsDeleting(true), 2000);
+      } else if (isDeleting && currentText === '') {
+        setIsDeleting(false);
+        setCurrentRoleIndex((prev) => (prev + 1) % ROLES.length);
+      } else {
+        setCurrentText(currentRole.substring(0, currentText.length + (isDeleting ? -1 : 1)));
+      }
+    };
+
+    const timeout = setTimeout(handleType, typeSpeed);
+    return () => clearTimeout(timeout);
+  }, [currentText, isDeleting, currentRoleIndex]);
+
+  const [greeting, setGreeting] = useState('HELLO');
+
+  useEffect(() => {
+    const hour = new Date().getHours();
+    if (hour >= 5 && hour < 12) setGreeting('GOOD MORNING');
+    else if (hour >= 12 && hour < 18) setGreeting('GOOD AFTERNOON');
+    else setGreeting('GOOD EVENING');
+  }, []);
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+      },
+    },
+  };
+
   return (
-    <section id="home" className="relative min-h-[90vh] flex flex-col justify-center border-b-2 border-magenta p-6 md:p-12 overflow-hidden scroll-mt-20 group">
+    <section 
+      id="home" 
+      onMouseMove={handleMouseMove}
+      className="relative min-h-[90vh] flex flex-col justify-center border-b border-white/5 p-6 md:p-12 overflow-hidden scroll-mt-20 group"
+    >
       
       <div 
-        className="absolute inset-0 pointer-events-none opacity-10 z-[1]"
+        className="absolute inset-0 pointer-events-none opacity-[0.07] z-[1] transition-transform duration-700 ease-out"
         style={{
           backgroundImage: `linear-gradient(#333 1px, transparent 1px), linear-gradient(90deg, #333 1px, transparent 1px)`,
-          backgroundSize: '40px 40px'
+          backgroundSize: '40px 40px',
+          transform: `translate(${mousePos.x * -0.5}px, ${mousePos.y * -0.5}px)`
         }}
       ></div>
 
-      <div className="relative z-10 max-w-7xl mx-auto w-full">
+      <motion.div 
+        className="relative z-10 max-w-7xl mx-auto w-full transition-transform duration-700 ease-out"
+        style={{ transform: `translate(${mousePos.x}px, ${mousePos.y}px)` }}
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
         {/* Terminal Header Decoration */}
-        <div className="mb-8 flex items-center text-magenta/60 font-mono text-sm h-6">
+        <motion.div variants={itemVariants} className="mb-4 flex items-center text-accent/50 font-mono text-sm h-6">
           <div id="hero-terminal-text" className="flex items-center">
             <Terminal size={16} className="inline mr-2" />
             <span className="inline-block leading-none">neel@dev:~/portfolio $ ./init_profile.sh</span>
           </div>
-        </div>
+        </motion.div>
+
+        {/* Dynamic Greeting */}
+        <motion.div variants={itemVariants} className="mb-2">
+           <span className="text-white font-mono text-xl md:text-2xl uppercase tracking-widest">{greeting}, I'M NEEL.</span>
+        </motion.div>
 
         {/* Massive Heading */}
-        <h1 className="text-[clamp(3.5rem,11vw,9rem)] font-black leading-[0.85] tracking-tighter text-magenta mb-8 select-none">
-          <span className="block">YEAH.</span>
-          <span className="block">I CODE.</span>
-        </h1>
+        <motion.h1 variants={itemVariants} className="text-[clamp(3.5rem,11vw,9rem)] font-black leading-[0.85] tracking-tight text-accent mb-8 select-none">
+          <span className="block">BUILD.</span>
+          <span className="block">SHIP.</span>
+        </motion.h1>
 
-        <div className="flex flex-col md:flex-row items-start md:items-end gap-8 md:gap-16 border-l-4 border-brutal-text pl-6 md:pl-8 ml-2 mt-12">
+        <div className="flex flex-col md:flex-row items-start md:items-end gap-8 md:gap-16 border-l border-white/15 pl-6 md:pl-8 ml-2 mt-12">
           
           {/* Subheading */}
-          <div className="max-w-xl">
-            <h2 className="text-white text-lg md:text-xl font-bold uppercase tracking-wide leading-relaxed mb-2">
-              Computer Engineering Student
+          <motion.div variants={itemVariants} className="max-w-xl">
+            <h2 className="text-white text-lg md:text-xl font-bold uppercase tracking-wide leading-relaxed mb-2 flex items-center h-8">
+              <span>{currentText}</span>
+              <span className="w-2 h-5 md:h-6 bg-accent ml-2 animate-pulse"></span>
             </h2>
             <p className="text-brutal-gray font-mono text-base md:text-lg">
-              FULL-STACK. DSA ENTHUSIAST.<br/>
-              BUILDING SYSTEMS THAT SCALE.
+              FULL-STACK ENGINEER. AI/ML BUILDER.<br/>
+              SYSTEMS THAT ACTUALLY SHIP.
             </p>
-          </div>
+          </motion.div>
 
           {/* CTA Button */}
-          <button 
+          <motion.button 
+            variants={itemVariants}
             onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
-            className="group relative px-10 py-5 bg-transparent overflow-hidden border-2 border-magenta transition-all duration-300 hover:shadow-[8px_8px_0px_#FF00FF] hover:-translate-y-1 hover:-translate-x-1 active:translate-y-0 active:translate-x-0 active:shadow-none"
+            className="group/cta flex items-center gap-3 px-10 py-5 rounded-full border border-accent/30 text-accent font-bold uppercase tracking-widest hover:bg-accent hover:text-brutal-bg hover:border-accent hover:shadow-glow transition-all duration-300"
           >
-            {/* Hover Fill Background */}
-            <div className="absolute inset-0 bg-magenta translate-y-[101%] group-hover:translate-y-0 transition-transform duration-300 ease-in-out" />
-            
-            {/* Content */}
-            <div className="relative z-10 flex items-center gap-3 text-magenta group-hover:text-black font-bold uppercase tracking-widest">
-              <span>See My Work</span>
-              <ArrowDownRight size={20} className="group-hover:rotate-[-45deg] transition-transform duration-300" />
-            </div>
-          </button>
+            <span>See My Work</span>
+            <ArrowDownRight size={20} className="group-hover/cta:rotate-[-45deg] transition-transform duration-300" />
+          </motion.button>
         </div>
-      </div>
+      </motion.div>
       
-      {/* Marquee Footer for Hero */}
-      <div className="absolute bottom-0 left-0 w-full h-12 border-t border-magenta bg-brutal-card flex items-center overflow-hidden z-20">
+      {/* Marquee Footer for Hero — quieter, slower, no hard box */}
+      <div className="absolute bottom-0 left-0 w-full h-12 border-t border-white/5 flex items-center overflow-hidden z-20">
         <div className="flex gap-8 animate-marquee whitespace-nowrap text-brutal-gray font-mono text-xs uppercase tracking-[0.2em]">
-          {Array(10).fill(" // Computer Engineering Fresher // Data Science & Machine Learning Enthusiast // Python & Pandas Skilled // ").map((text, i) => (
-             <span key={i} className="text-magenta/50">{text}</span>
+          {Array(6).fill(" // COMPUTER ENGINEERING STUDENT // FULL-STACK ENGINEER // AI/ML BUILDER // PYTHON · TYPESCRIPT · REACT // ").map((text, i) => (
+            <span key={i} className="text-brutal-gray/40">{text}</span>
           ))}
         </div>
       </div>
