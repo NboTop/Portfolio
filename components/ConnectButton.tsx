@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
+import { useTheme } from './ThemeContext';
 
 interface ConnectButtonProps {
   onNavigate: () => void;
@@ -8,20 +9,18 @@ interface ConnectButtonProps {
 const ConnectButton: React.FC<ConnectButtonProps> = ({ onNavigate }) => {
   const mountRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
+  const { theme } = useTheme();
 
   useEffect(() => {
     if (!mountRef.current) return;
 
-    // CLEANUP- ensure we don't have duplicate canvases from doublemounts
     while (mountRef.current.firstChild) {
       mountRef.current.removeChild(mountRef.current.firstChild);
     }
 
-    // Dimensions
     const width = 98;
     const height = 98;
 
-    // Scene Setup
     const scene = new THREE.Scene();
     
     const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
@@ -35,7 +34,7 @@ const ConnectButton: React.FC<ConnectButtonProps> = ({ onNavigate }) => {
     renderer.setPixelRatio(window.devicePixelRatio);
     mountRef.current.appendChild(renderer.domElement);
 
-    // Geometry- TorusKnot - Square, wireframe aesthetic
+    // Always brutal magenta color for the 3D object
     const geometry = new THREE.TorusKnotGeometry(0.45, 0.15, 64, 8);
     const material = new THREE.MeshBasicMaterial({ 
       color: 0xFF00FF,
@@ -44,7 +43,6 @@ const ConnectButton: React.FC<ConnectButtonProps> = ({ onNavigate }) => {
     const mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh);
 
-    // Animation Loop
     let animationId: number;
     const animate = () => {
       animationId = requestAnimationFrame(animate);
@@ -61,7 +59,6 @@ const ConnectButton: React.FC<ConnectButtonProps> = ({ onNavigate }) => {
 
     return () => {
       cancelAnimationFrame(animationId);
-      // Check if the renderer's DOM element is still a child before removing
       if (mountRef.current && renderer.domElement && mountRef.current.contains(renderer.domElement)) {
         mountRef.current.removeChild(renderer.domElement);
       }
@@ -69,8 +66,9 @@ const ConnectButton: React.FC<ConnectButtonProps> = ({ onNavigate }) => {
       material.dispose();
       renderer.dispose();
     };
-  }, []);
+  }, [theme]);
 
+  // Keep theme styling in mind. The external classes depend on Tailwind, which handles its own color injection dynamically.
   return (
     <div 
       ref={mountRef}
@@ -78,14 +76,15 @@ const ConnectButton: React.FC<ConnectButtonProps> = ({ onNavigate }) => {
       onClick={onNavigate}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="fixed z-[100] cursor-pointer bg-black border-2 border-magenta
+      className="fixed z-[100] cursor-pointer bg-black/60 backdrop-blur-md border border-[#FF00FF]/30 
                  w-[70px] h-[70px] md:w-[98px] md:h-[98px]
                  bottom-[20px] right-[20px] md:bottom-[30px] md:right-[30px]
-                 transition-all duration-200 hover:shadow-brutal hover:-translate-y-1 hover:-translate-x-1 flex items-center justify-center overflow-hidden group"
+                 transition-all duration-300 flex items-center justify-center overflow-hidden group
+                 rounded-full hover:border-[#FF00FF]/80 hover:shadow-[0_0_32px_rgba(255,0,255,0.4)] hover:scale-105"
       title="CONNECT"
     >
       {/* Label */}
-      <div className="absolute bottom-1 w-full text-center text-[8px] md:text-[10px] font-black text-magenta uppercase tracking-widest z-10 bg-black/80 pointer-events-none">
+      <div className="absolute bottom-2 w-full text-center text-[8px] md:text-[10px] font-black text-[#FF00FF] uppercase tracking-widest z-10 pointer-events-none">
         CONNECT
       </div>
     </div>
