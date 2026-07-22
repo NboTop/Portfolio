@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { ArrowLeft, ArrowUpRight, Mail, Phone, MapPin } from 'lucide-react';
+import { ArrowLeft, ArrowUpRight, Mail, Phone, MapPin, Copy, Check } from 'lucide-react';
 import * as THREE from 'three';
 
 interface ContactPageProps {
@@ -104,9 +104,46 @@ const ContactPage: React.FC<ContactPageProps> = ({ onBack }) => {
            </h1>
         </div>
 
-        {/* Empty / Decorative Cells */}
-        <div className="bg-void hidden lg:block"></div>
-        <div className="bg-void hidden lg:block"></div>
+        {/* Contact Form (Span 2) */}
+        <div className="bg-void p-8 md:p-12 lg:col-span-2 border-b border-cream">
+           <div className="text-xs uppercase opacity-50 font-bold tracking-widest mb-8">Send a Message</div>
+           <form action="https://formsubmit.co/neel.voidlogic@gmail.com" method="POST" className="flex flex-col gap-6">
+              {/* Optional: Add a honeypot field or configure redirects with Formsubmit later */}
+              <input type="hidden" name="_subject" value="New message from portfolio website!" />
+              <input type="hidden" name="_template" value="box" />
+              <input type="hidden" name="_next" value="https://neel.my.id/" />
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <input 
+                  type="text" 
+                  name="name"
+                  placeholder="Your Name" 
+                  required 
+                  className="bg-transparent border-b border-white/20 focus:border-cream py-3 outline-none transition-colors text-cream placeholder:text-white/30"
+                />
+                <input 
+                  type="email" 
+                  name="email"
+                  placeholder="Your Email" 
+                  required 
+                  className="bg-transparent border-b border-white/20 focus:border-cream py-3 outline-none transition-colors text-cream placeholder:text-white/30"
+                />
+              </div>
+              <textarea 
+                name="message"
+                placeholder="How can we collaborate?" 
+                rows={4}
+                required
+                className="bg-transparent border-b border-white/20 focus:border-cream py-3 outline-none transition-colors text-cream placeholder:text-white/30 resize-none"
+              />
+              <button 
+                type="submit" 
+                className="self-start mt-4 px-8 py-3 bg-cream text-void font-bold uppercase tracking-widest hover:bg-white transition-colors"
+              >
+                Send Message
+              </button>
+           </form>
+        </div>
 
         {/* Info Cards */}
         <ContactCard 
@@ -115,12 +152,13 @@ const ContactPage: React.FC<ContactPageProps> = ({ onBack }) => {
           sub="Preferred Channel" 
           href="mailto:neel.voidlogic@gmail.com" 
           icon={<Mail size={24} />}
+          copyValue="neel.voidlogic@gmail.com"
         />
         <ContactCard 
           label="PHONE" 
-          value="+91 820 019 0878" 
+          value="+91 123 456 7890" 
           sub="WhatsApp Available" 
-          href="https://wa.me/+918200190878"
+          href="https://wa.me/+911234567890"
           icon={<Phone size={24} />}
         />
         <ContactCard 
@@ -134,9 +172,9 @@ const ContactPage: React.FC<ContactPageProps> = ({ onBack }) => {
         <div className="bg-void p-8 flex flex-col justify-between group hover:bg-cream hover:text-void transition-colors duration-300">
            <div className="text-xs uppercase opacity-50 font-bold tracking-widest">Socials</div>
            <div className="space-y-4 mt-8 w-full">
-              <SocialLink href="https://www.linkedin.com/in/neelmenghani" label="LINKEDIN" />
+              <SocialLink href="https://linkedin.com/in/neel" label="LINKEDIN" />
               <SocialLink href="https://github.com/nbotop" label="GITHUB" />
-              <SocialLink href="https://x.com/neelhumai" label="X" />
+              <SocialLink href="https://instagram.com/neel" label="INSTAGRAM" />
            </div>
         </div>
 
@@ -166,22 +204,48 @@ const ContactPage: React.FC<ContactPageProps> = ({ onBack }) => {
   );
 };
 
-const ContactCard = ({ label, value, sub, href, icon }: { label: string, value: string, sub: string, href?: string, icon: React.ReactNode }) => (
-  <a 
-    href={href} 
-    className={`bg-void p-8 flex flex-col justify-between min-h-[250px] group hover:bg-cream hover:text-void transition-colors duration-300 ${!href ? 'cursor-default' : 'cursor-pointer'}`}
-  >
-    <div className="flex justify-between items-start">
-       <span className="text-xs uppercase font-bold tracking-widest opacity-50 group-hover:opacity-100">{label}</span>
-       <div className="opacity-50 group-hover:opacity-100">{icon}</div>
-    </div>
-    
-    <div>
-       <div className="font-bold text-lg md:text-xl break-words mb-2">{value}</div>
-       <div className="text-xs opacity-50 font-mono">{sub}</div>
-    </div>
-  </a>
-);
+const ContactCard = ({ label, value, sub, href, icon, copyValue }: { label: string, value: string, sub: string, href?: string, icon: React.ReactNode, copyValue?: string }) => {
+  const [copied, setCopied] = React.useState(false);
+
+  const handleCopy = (e: React.MouseEvent) => {
+    if (copyValue) {
+      e.preventDefault();
+      e.stopPropagation();
+      navigator.clipboard.writeText(copyValue);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
+  return (
+    <a 
+      href={href} 
+      className={`relative bg-void p-8 flex flex-col justify-between min-h-[250px] group hover:bg-cream hover:text-void transition-colors duration-300 ${!href && !copyValue ? 'cursor-default' : 'cursor-pointer'}`}
+      onClick={!href && copyValue ? handleCopy : undefined}
+    >
+      <div className="flex justify-between items-start">
+        <span className="text-xs uppercase font-bold tracking-widest opacity-50 group-hover:opacity-100">{label}</span>
+        <div className="opacity-50 group-hover:opacity-100 flex items-center gap-3">
+          {copyValue && (
+            <button
+              onClick={handleCopy}
+              className="opacity-0 group-hover:opacity-100 transition-opacity p-2 hover:bg-void hover:text-cream rounded-full"
+              title="Copy to clipboard"
+            >
+              {copied ? <Check size={16} /> : <Copy size={16} />}
+            </button>
+          )}
+          {icon}
+        </div>
+      </div>
+      
+      <div>
+        <div className="font-bold text-lg md:text-xl break-words mb-2">{value}</div>
+        <div className="text-xs opacity-50 font-mono">{sub}</div>
+      </div>
+    </a>
+  );
+};
 
 const SocialLink = ({ href, label }: { href: string, label: string }) => (
   <a href={href} target="_blank" rel="noreferrer" className="flex items-center justify-between border-b border-zinc-800 pb-3 group/link hover:border-void w-full">
