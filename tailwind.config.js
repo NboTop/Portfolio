@@ -2,7 +2,6 @@
 export default {
   content: [
     "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
     "./components/**/*.{js,ts,jsx,tsx}",
     "./App.tsx"
   ],
@@ -10,14 +9,11 @@ export default {
   theme: {
     extend: {
       colors: {
-        // brutalist main palette
-        'brutal-bg': '#0a0a0a',
-        'brutal-card': '#1a1a1a',
-        'brutal-text': '#f7f7f7',
-        'brutal-gray': '#a0a0a0',
-        'magenta': '#FF00FF',
-        'magenta-dim': 'rgba(255, 0, 255, 0.1)',
-        // contact page palette
+        'brutal-bg': 'rgb(var(--color-bg) / <alpha-value>)',
+        'brutal-card': 'rgb(var(--color-card) / <alpha-value>)',
+        'brutal-text': 'rgb(var(--color-text) / <alpha-value>)',
+        'brutal-gray': 'rgb(var(--color-gray) / <alpha-value>)',
+        'accent': 'rgb(var(--color-accent) / <alpha-value>)',
         'void': '#000000',
         'cream': '#E6E3D8',
       },
@@ -26,12 +22,12 @@ export default {
         display: ['"Archivo Black"', 'sans-serif'],
       },
       boxShadow: {
-        'brutal': '6px 6px 0px #FF00FF',
-        'brutal-hover': '10px 10px 0px #FF00FF',
-        'brutal-sm': '3px 3px 0px #FF00FF',
+        'soft': 'var(--shadow-soft)',
+        'soft-hover': 'var(--shadow-hover)',
+        'glow': 'var(--shadow-glow)',
       },
       animation: {
-        'marquee': 'marquee 40s linear infinite',
+        'marquee': 'marquee 60s linear infinite',
       },
       keyframes: {
         marquee: {
@@ -41,5 +37,7 @@ export default {
       }
     }
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/typography'),
+  ],
 }
