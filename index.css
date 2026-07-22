@@ -3,47 +3,74 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --color-bg: 10 10 10;
+    --color-card: 18 18 20; 
+    --color-text: 242 242 240;
+    --color-gray: 139 139 145;
+    --color-accent: 232 228 217;
+
+    --shadow-soft: 0 8px 30px rgba(0,0,0,0.45);
+    --shadow-hover: 0 16px 48px rgba(0,0,0,0.55);
+    --shadow-glow: 0 0 32px rgba(232,228,217,0.10);
+  }
+
+  /* theme-brutal variables */
+  .theme-brutal {
+    --color-bg: 10 10 10;
+    --color-card: 26 26 26; 
+    --color-text: 247 247 247;
+    --color-gray: 160 160 160;
+    --color-accent: 255 0 255;
+
+    --shadow-soft: 6px 6px 0px #FF00FF;
+    --shadow-hover: 10px 10px 0px #FF00FF;
+    --shadow-glow: 3px 3px 0px #FF00FF;
+  }
+
   body {
-    background-color: #0a0a0a;
-    color: #f7f7f7;
+    background-color: rgb(var(--color-bg));
+    color: rgb(var(--color-text));
     font-family: 'JetBrains Mono', monospace;
     overflow-x: hidden;
   }
-  
 
-  * {
-    border-radius: 0 !important; 
+  .stroke-text {
+    -webkit-text-stroke: 2px rgb(var(--color-text));
+    color: transparent;
   }
 
-  /* custom scrollbar */
   ::-webkit-scrollbar {
-    width: 12px;
-    background: #0a0a0a;
-    border-left: 1px solid #333;
+    width: 10px;
+    background: rgb(var(--color-bg));
   }
   ::-webkit-scrollbar-thumb {
-    background: #FF00FF;
-    border: 2px solid #0a0a0a;
+    background: rgba(var(--color-accent) / 0.18);
+    border: 2px solid rgb(var(--color-bg));
+    border-radius: 999px;
   }
   ::-webkit-scrollbar-thumb:hover {
+    background: rgba(var(--color-accent) / 0.32);
+  }
+
+  /* When brutal theme is active, remove rounded corner from scrollbar */
+  .theme-brutal ::-webkit-scrollbar-thumb {
+    background: rgb(var(--color-accent));
+    border-radius: 0;
+  }
+  .theme-brutal ::-webkit-scrollbar-thumb:hover {
     background: #d400d4;
   }
 
   ::selection {
-    background: #FF00FF;
+    background: rgba(var(--color-accent) / 0.85);
+    color: rgb(var(--color-bg));
+  }
+
+  .theme-brutal ::selection {
+    background: rgb(var(--color-accent));
     color: #000;
   }
-}
-
-/* animations */
-@keyframes blob {
-  0% { transform: translate(0px, 0px) scale(1); }
-  33% { transform: translate(30px, -50px) scale(1.1); }
-  66% { transform: translate(-20px, 20px) scale(0.9); }
-  100% { transform: translate(0px, 0px) scale(1); }
-}
-.animate-blob {
-  animation: blob 7s infinite;
 }
 
 @keyframes float {
@@ -53,23 +80,6 @@
 }
 .animate-float {
   animation: float 6s ease-in-out infinite;
-}
-
-@keyframes float-delayed {
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-20px); }
-  100% { transform: translateY(0px); }
-}
-.animate-float-delayed {
-  animation: float 6s ease-in-out infinite 3s;
-}
-
-@keyframes pulse-slow {
-  0%, 100% { opacity: 0.2; }
-  50% { opacity: 0.1; }
-}
-.animate-pulse-slow {
-  animation: pulse-slow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 @keyframes fade-in-up {
@@ -84,4 +94,19 @@
 }
 .animate-fade-in-up {
   animation: fade-in-up 0.5s ease-out forwards;
+}
+
+/* Custom Scrollbar for Modal */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
 }
