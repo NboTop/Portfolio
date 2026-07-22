@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+<channel>
+  <title>Neel Portfolio Updates</title>
+  <link>https://neel.my.id</link>
+  <description>Latest updates, projects, and thoughts from Neel</description>
+  <item>
+    <title>Launched New Portfolio</title>
+    <link>https://neel.my.id</link>
+    <description>Welcome to my new brutalist portfolio website!</description>
+    <pubDate>Wed, 22 Jul 2026 12:00:00 -0700</pubDate>
+  </item>
+</channel>
+</rss>
