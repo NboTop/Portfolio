@@ -156,9 +156,9 @@ const ContactPage: React.FC<ContactPageProps> = ({ onBack }) => {
         />
         <ContactCard 
           label="PHONE" 
-          value="+91 123 456 7890" 
+          value="+91 820 019 0878" 
           sub="WhatsApp Available" 
-          href="https://wa.me/+911234567890"
+          href="https://wa.me/+918200190878"
           icon={<Phone size={24} />}
         />
         <ContactCard 
@@ -172,9 +172,9 @@ const ContactPage: React.FC<ContactPageProps> = ({ onBack }) => {
         <div className="bg-void p-8 flex flex-col justify-between group hover:bg-cream hover:text-void transition-colors duration-300">
            <div className="text-xs uppercase opacity-50 font-bold tracking-widest">Socials</div>
            <div className="space-y-4 mt-8 w-full">
-              <SocialLink href="https://linkedin.com/in/neel" label="LINKEDIN" />
+              <SocialLink href="https://www.linkedin.com/in/neelmenghani" label="LINKEDIN" />
               <SocialLink href="https://github.com/nbotop" label="GITHUB" />
-              <SocialLink href="https://instagram.com/neel" label="INSTAGRAM" />
+              <SocialLink href="https://x.com/neelhumai" label="X" />
            </div>
         </div>
 
