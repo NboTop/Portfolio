@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useTheme } from './components/ThemeContext';
 import Hero from './components/Hero';
-import Projects from './components/Projects';
+import ProjectsSection from './components/ProjectsSection';
 import About from './components/About';
 import Stack from './components/Stack';
 import Navbar from './components/Navbar';
@@ -82,7 +82,7 @@ const App: React.FC = () => {
       <main className="flex flex-col border-l border-r border-white/5 max-w-[1400px] mx-auto bg-brutal-bg">
         <Hero />
         <About />
-        <Projects />
+        <ProjectsSection />
         <Stack />
       </main>
       
