@@ -17,6 +17,7 @@ const ContactPage: React.FC<ContactPageProps> = ({ onBack }) => {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [status, setStatus] = useState<SubmitStatus>('idle');
+  const [isSlow, setIsSlow] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
@@ -95,7 +96,7 @@ const ContactPage: React.FC<ContactPageProps> = ({ onBack }) => {
 
   const submitFormPayload = async (useFormData: boolean) => {
     const controller = new AbortController();
-    const timeoutId = window.setTimeout(() => controller.abort(), 12000);
+    const timeoutId = window.setTimeout(() => controller.abort(), 65000);
 
     try {
       const payload = {
@@ -146,7 +147,7 @@ const ContactPage: React.FC<ContactPageProps> = ({ onBack }) => {
 
       return data;
     } catch (err) {
-      if (err instanceof Error && (err.name === 'AbortError' || err.name === 'TypeError')) {
+      if (err instanceof Error && err.name === 'TypeError') {
         const retryableErr = err as Error & { retryable?: boolean };
         retryableErr.retryable = true;
       }
@@ -173,38 +174,52 @@ const ContactPage: React.FC<ContactPageProps> = ({ onBack }) => {
     }
 
     setStatus('submitting');
+    setIsSlow(false);
     setErrorMessage('');
 
-    const maxAttempts = 3;
+    const slowTimer = window.setTimeout(() => setIsSlow(true), 4000);
+    const maxAttempts = 2;
     let lastError: unknown = null;
 
-    for (let attempt = 0; attempt < maxAttempts; attempt++) {
-      try {
-        // Use JSON on first attempt, fallback to FormData on retry (avoids CORS preflight issues)
-        const useFormData = attempt > 0;
-        await submitFormPayload(useFormData);
-        setStatus('success');
-        setName('');
-        setEmail('');
-        setMessage('');
-        return;
-      } catch (err) {
-        lastError = err;
-        const isRetryable = err instanceof Error && (err as Error & { retryable?: boolean }).retryable !== false;
-        if (attempt < maxAttempts - 1 && isRetryable) {
-          await new Promise((resolve) => setTimeout(resolve, 500 * (attempt + 1)));
-          continue;
+    try {
+      for (let attempt = 0; attempt < maxAttempts; attempt++) {
+        try {
+          // Use FormData on first attempt to skip CORS OPTIONS preflight (~11s saved), fallback to JSON on retry
+          const useFormData = attempt === 0;
+          await submitFormPayload(useFormData);
+          setStatus('success');
+          setName('');
+          setEmail('');
+          setMessage('');
+          return;
+        } catch (err) {
+          lastError = err;
+          const isRetryable =
+            err instanceof Error &&
+            err.name !== 'AbortError' &&
+            (err as Error & { retryable?: boolean }).retryable === true;
+          if (attempt < maxAttempts - 1 && isRetryable) {
+            await new Promise((resolve) => setTimeout(resolve, 600));
+            continue;
+          }
+          break;
         }
-        break;
       }
-    }
 
-    setStatus('error');
-    setErrorMessage(
-      lastError instanceof Error && lastError.message && lastError.name !== 'AbortError'
-        ? lastError.message
-        : 'Could not send message right now. Please try again or email directly.'
-    );
+      setStatus('error');
+      if (lastError instanceof Error && lastError.name === 'AbortError') {
+        setErrorMessage('Mail server took too long to respond. Please try again or email directly.');
+      } else {
+        setErrorMessage(
+          lastError instanceof Error && lastError.message
+            ? lastError.message
+            : 'Could not send message right now. Please try again or email directly.'
+        );
+      }
+    } finally {
+      window.clearTimeout(slowTimer);
+      setIsSlow(false);
+    }
   };
 
   const mailtoFallbackHref = `mailto:neel.voidlogic@gmail.com?subject=${encodeURIComponent(
@@ -313,7 +328,7 @@ const ContactPage: React.FC<ContactPageProps> = ({ onBack }) => {
                   {status === 'submitting' ? (
                     <>
                       <Loader2 size={16} className="animate-spin" />
-                      Sending...
+                      {isSlow ? 'Sending (waiting for mail server)...' : 'Sending...'}
                     </>
                   ) : (
                     'Send Message'
